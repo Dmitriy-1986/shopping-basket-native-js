@@ -57,67 +57,67 @@
         </aside>
         <main>
             <div class="cards">
-                <div class="card" data-type="apple">
+                <div class="card" id="apple1" >
                     <img src="./apple.png" alt="apple">
                     <h2>Apple</h2>
                     <p><mark><span class="price">8</span>$</mark></p>
                     <button>Добавить в корзину</button>
                 </div>
-                <div class="card" data-type="apple">
+                <div class="card" id="apple2">
                     <img src="./apple-green.png" alt="apple">
                     <h2>Apple</h2>
                     <p><mark><span class="price">8</span>$</mark></p>
                     <button>Добавить в корзину</button>
                 </div>
-                <div class="card" data-type="banana">
+                <div class="card" id="banana1">
                     <img src="./banan.png" alt="banan">
                     <h2>Banan</h2>
                     <p><mark><span class="price">8</span>$</mark></p>
                     <button>Добавить в корзину</button>
                 </div>
-                <div class="card" data-type="banana">
+                <div class="card" id="banana2">
                     <img src="./banan.png" alt="banan">
                     <h2>Banan</h2>
                     <p><mark><span class="price">8</span>$</mark></p>
                     <button>Добавить в корзину</button>
                 </div>
-                <div class="card" data-type="banana">
+                <div class="card" id="banana3">
                     <img src="./banan.png" alt="banan">
                     <h2>Banan</h2>
                     <p><mark><span class="price">8</span>$</mark></p>
                     <button>Добавить в корзину</button>
                 </div>
-                <div class="card" data-type="cherry">
+                <div class="card" id="cherry1">
                     <img src="./cherry.png" alt="cherry">
                     <h2>Cherry</h2>
                     <p><mark><span class="price">8</span>$</mark></p>
                     <button>Добавить в корзину</button>
                 </div>
-                <div class="card" data-type="cherry">
+                <div class="card" id="cherry2">
                     <img src="./cherry.png" alt="cherry">
                     <h2>Cherry</h2>
                     <p><mark><span class="price">8</span>$</mark></p>
                     <button>Добавить в корзину</button>
                 </div>
-                <div class="card" data-type="cherry">
+                <div class="card" id="cherry3">
                     <img src="./cherry.png" alt="cherry">
                     <h2>Cherry</h2>
                     <p><mark><span class="price">8</span>$</mark></p>
                     <button>Добавить в корзину</button>
                 </div>
-                <div class="card" data-type="grape">
+                <div class="card" id="grape1">
                     <img src="./grape.png" alt="grape">
                     <h2>Grape</h2>
                     <p><mark><span class="price">8</span>$</mark></p>
                     <button>Добавить в корзину</button>
                 </div>
-                <div class="card" data-type="grape">
+                <div class="card" id="grape2">
                     <img src="./grape.png" alt="grape">
                     <h2>Grape</h2>
                     <p><mark><span class="price">8</span>$</mark></p>
                     <button>Добавить в корзину</button>
                 </div>
-                <div class="card" data-type="grape">
+                <div class="card" id="grape3">
                     <img src="./grape.png" alt="grape">
                     <h2>Grape</h2>
                     <p><mark><span class="price">8</span>$</mark></p>
@@ -130,75 +130,56 @@
     </div>
 
     <script>
-        // Получите все элементы с классом "card"
         const cards = document.querySelectorAll('.card');
-
-        // Получите элемент корзины
         const cart = document.getElementById('cart');
-
-        // Создайте объект для отслеживания выбранных товаров
         const selectedItems = {};
 
-        // Обработчик клика на карточке товара
         function handleCardClick(event) {
             const card = event.currentTarget;
-            const itemType = card.getAttribute('data-type');
+            const itemId = card.id; // Получаем уникальный id товара
             const itemName = card.querySelector('h2').textContent;
             const itemPrice = card.querySelector('.price').textContent;
 
-            // Добавьте товар в объект выбранных товаров
-            if (selectedItems[itemType]) {
-                selectedItems[itemType].count++;
+            if (selectedItems[itemId]) {
+                selectedItems[itemId].count++;
             } else {
-                selectedItems[itemType] = {
+                selectedItems[itemId] = {
                     name: itemName,
                     price: itemPrice,
                     count: 1,
                 };
             }
 
-            // Обновите отображение корзины
             updateCart();
         }
 
-        // Функция для обновления отображения корзины
         function updateCart() {
-            // Очистите содержимое корзины
             cart.innerHTML = '';
-
-            // Добавьте выбранные товары в корзину
-            for (const itemType in selectedItems) {
-                const item = selectedItems[itemType];
+            for (const itemId in selectedItems) {
+                const item = selectedItems[itemId];
                 const listItem = document.createElement('li');
-                const removeButton = document.createElement('button'); // Создайте кнопку "Удалить"
+                const removeButton = document.createElement('button');
                 removeButton.textContent = 'Удалить';
                 removeButton.addEventListener('click', () => {
-                    // Обработчик клика на кнопке "Удалить"
-                    removeItem(itemType);
+                    removeItem(itemId);
                 });
 
                 listItem.textContent = `${item.name} x${item.count} - ${item.price * item.count}$`;
-                listItem.appendChild(removeButton); // Добавьте кнопку "Удалить" к товару
+                listItem.appendChild(removeButton);
                 cart.appendChild(listItem);
             }
         }
 
-        // Функция для удаления товара из корзины
-        function removeItem(itemType) {
-            if (selectedItems[itemType]) {
-                selectedItems[itemType].count--;
-
-                // Если количество товара уменьшилось до нуля, удалите товар из корзины
-                if (selectedItems[itemType].count <= 0) {
-                    delete selectedItems[itemType];
+        function removeItem(itemId) {
+            if (selectedItems[itemId]) {
+                selectedItems[itemId].count--;
+                if (selectedItems[itemId].count <= 0) {
+                    delete selectedItems[itemId];
                 }
             }
-
-            // Обновите отображение корзины
             updateCart();
         }
 
-        // Добавьте обработчик клика на каждую карточку товара
         cards.forEach((card) => {
             card.addEventListener('click', handleCardClick);
         });
@@ -207,35 +188,3 @@
 </body>
 
 </html>
-<!-- 
-    
-Этот код представляет собой простую веб-страницу, которая отображает каталог товаров и позволяет пользователям добавлять и удалять товары из корзины. Давайте разберем, как он работает:
-
-HTML-разметка:
-
-Страница содержит два основных блока: <aside> для корзины и <main> для каталога товаров.
-Каждый товар представлен в блоке <div> с классом "card". Внутри этого блока есть изображение товара, его название, цена и кнопка "Добавить в корзину".
-JavaScript:
-
-JavaScript-код начинается с получения всех элементов с классом "card" и элемента корзины по их идентификатору.
-Создается объект selectedItems для отслеживания выбранных товаров. Этот объект будет содержать информацию о количестве каждого товара в корзине.
-Есть обработчик события click для каждой карточки товара, который вызывает функцию handleCardClick(). Эта функция извлекает информацию о товаре (тип, имя, цена) и добавляет ее в объект selectedItems.
-handleCardClick():
-
-Извлекает информацию о товаре (тип, имя, цена) из карточки товара, на которую был клик.
-Проверяет, есть ли уже этот тип товара в объекте selectedItems. Если есть, увеличивает счетчик, иначе создает новую запись.
-После изменения объекта selectedItems вызывает updateCart(), чтобы обновить отображение корзины.
-updateCart():
-
-Очищает содержимое корзины (<ul id="cart">) и пересоздает его.
-Для каждого типа товара в selectedItems создается элемент списка <li>. Каждый такой элемент включает название товара, количество и обработчик события для кнопки "Удалить".
-При клике на кнопку "Удалить", вызывается функция removeItem().
-removeItem():
-
-Уменьшает количество выбранного товара в объекте selectedItems.
-Если количество становится равным нулю, товар удаляется из объекта.
-После удаления товара вызывается updateCart() для обновления отображения корзины.
-Наконец, добавляется обработчик клика для каждой карточки товара, который запускает handleCardClick(). Это позволяет пользователям добавлять товары в корзину при клике на соответствующую кнопку "Добавить в корзину".
-
-Таким образом, этот код создает интерактивную страницу, на которой пользователи могут выбирать товары, добавлять их в корзину и удалять из нее.
- -->
