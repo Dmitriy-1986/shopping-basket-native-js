@@ -53,11 +53,12 @@
                 <ul id="cart">
                     <!-- Сюда будут добавляться выбранные товары -->
                 </ul>
+                <div id="total">Общая сумма: $0</div>
             </aside>
         </aside>
         <main>
             <div class="cards">
-                <div class="card" id="apple1" >
+                <div class="card" id="apple1">
                     <img src="./apple.png" alt="apple">
                     <h2>Apple</h2>
                     <p><mark><span class="price">8</span>$</mark></p>
@@ -132,13 +133,14 @@
     <script>
         const cards = document.querySelectorAll('.card');
         const cart = document.getElementById('cart');
+        const totalElement = document.getElementById('total'); // Получите элемент для отображения общей суммы
         const selectedItems = {};
 
         function handleCardClick(event) {
             const card = event.currentTarget;
-            const itemId = card.id; // Получаем уникальный id товара
+            const itemId = card.id;
             const itemName = card.querySelector('h2').textContent;
-            const itemPrice = card.querySelector('.price').textContent;
+            const itemPrice = parseFloat(card.querySelector('.price').textContent); // Преобразуйте цену в число
 
             if (selectedItems[itemId]) {
                 selectedItems[itemId].count++;
@@ -155,6 +157,8 @@
 
         function updateCart() {
             cart.innerHTML = '';
+            let total = 0; // Инициализируйте общую сумму
+
             for (const itemId in selectedItems) {
                 const item = selectedItems[itemId];
                 const listItem = document.createElement('li');
@@ -164,10 +168,14 @@
                     removeItem(itemId);
                 });
 
-                listItem.textContent = `${item.name} x${item.count} - ${item.price * item.count}$`;
+                listItem.textContent = `${item.name} x${item.count} - $${item.price * item.count}`;
                 listItem.appendChild(removeButton);
                 cart.appendChild(listItem);
+
+                total += item.price * item.count; // Обновите общую сумму
             }
+
+            totalElement.textContent = `Общая сумма: $${total.toFixed(2)}`; // Отображение общей суммы с двумя знаками после запятой
         }
 
         function removeItem(itemId) {
@@ -183,7 +191,6 @@
         cards.forEach((card) => {
             card.addEventListener('click', handleCardClick);
         });
-
     </script>
 </body>
 
