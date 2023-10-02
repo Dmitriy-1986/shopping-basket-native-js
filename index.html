@@ -49,11 +49,9 @@
     <div class="container">
         <aside>
             <aside>
-                <h2>Корзина товара</h2>
-                <ul id="cart">
-                    <!-- Сюда будут добавляться выбранные товары -->
-                </ul>
-                <div id="total">Общая сумма: $0</div>
+                <h2>Product Basket</h2>
+                <ul id="cart"></ul>
+                <div id="total">Total Amount: $0</div>
             </aside>
         </aside>
         <main>
@@ -62,67 +60,67 @@
                     <img src="./apple.png" alt="apple">
                     <h2>Apple</h2>
                     <p><mark><span class="price">8</span>$</mark></p>
-                    <button>Добавить в корзину</button>
+                    <button>Add to cart</button>
                 </div>
                 <div class="card" id="apple2">
                     <img src="./apple-green.png" alt="apple">
                     <h2>Apple</h2>
-                    <p><mark><span class="price">8</span>$</mark></p>
-                    <button>Добавить в корзину</button>
+                    <p><mark><span class="price">9</span>$</mark></p>
+                    <button>Add to cart</button>
                 </div>
                 <div class="card" id="banana1">
                     <img src="./banan.png" alt="banan">
                     <h2>Banan</h2>
-                    <p><mark><span class="price">8</span>$</mark></p>
-                    <button>Добавить в корзину</button>
+                    <p><mark><span class="price">10</span>$</mark></p>
+                    <button>Add to cart</button>
                 </div>
                 <div class="card" id="banana2">
                     <img src="./banan.png" alt="banan">
                     <h2>Banan</h2>
-                    <p><mark><span class="price">8</span>$</mark></p>
-                    <button>Добавить в корзину</button>
+                    <p><mark><span class="price">11</span>$</mark></p>
+                    <button>Add to cart</button>
                 </div>
                 <div class="card" id="banana3">
                     <img src="./banan.png" alt="banan">
                     <h2>Banan</h2>
-                    <p><mark><span class="price">8</span>$</mark></p>
-                    <button>Добавить в корзину</button>
+                    <p><mark><span class="price">12</span>$</mark></p>
+                    <button>Add to cart</button>
                 </div>
                 <div class="card" id="cherry1">
                     <img src="./cherry.png" alt="cherry">
                     <h2>Cherry</h2>
-                    <p><mark><span class="price">8</span>$</mark></p>
-                    <button>Добавить в корзину</button>
+                    <p><mark><span class="price">13</span>$</mark></p>
+                    <button>Add to cart</button>
                 </div>
                 <div class="card" id="cherry2">
                     <img src="./cherry.png" alt="cherry">
                     <h2>Cherry</h2>
                     <p><mark><span class="price">8</span>$</mark></p>
-                    <button>Добавить в корзину</button>
+                    <button>Add to cart</button>
                 </div>
                 <div class="card" id="cherry3">
                     <img src="./cherry.png" alt="cherry">
                     <h2>Cherry</h2>
                     <p><mark><span class="price">8</span>$</mark></p>
-                    <button>Добавить в корзину</button>
+                    <button>Add to cart</button>
                 </div>
                 <div class="card" id="grape1">
                     <img src="./grape.png" alt="grape">
                     <h2>Grape</h2>
                     <p><mark><span class="price">8</span>$</mark></p>
-                    <button>Добавить в корзину</button>
+                    <button>Add to cart</button>
                 </div>
                 <div class="card" id="grape2">
                     <img src="./grape.png" alt="grape">
                     <h2>Grape</h2>
                     <p><mark><span class="price">8</span>$</mark></p>
-                    <button>Добавить в корзину</button>
+                    <button>Add to cart</button>
                 </div>
                 <div class="card" id="grape3">
                     <img src="./grape.png" alt="grape">
                     <h2>Grape</h2>
                     <p><mark><span class="price">8</span>$</mark></p>
-                    <button>Добавить в корзину</button>
+                    <button>Add to cart</button>
                 </div>
             </div>
 
@@ -162,20 +160,46 @@
             for (const itemId in selectedItems) {
                 const item = selectedItems[itemId];
                 const listItem = document.createElement('li');
-                const removeButton = document.createElement('button');
-                removeButton.textContent = 'Удалить';
-                removeButton.addEventListener('click', () => {
+                const quantityContainer = document.createElement('div'); // Контейнер для цифры и кнопок
+                const quantityText = document.createElement('span'); // Элемент для отображения количества товаров
+                const addButton = document.createElement('button');
+                const subtractButton = document.createElement('button');
+
+                addButton.textContent = '+';
+                subtractButton.textContent = '-';
+
+                quantityText.textContent = item.count; // Устанавливаем текст цифры
+
+                addButton.addEventListener('click', () => {
+                    addItem(itemId);
+                });
+
+                subtractButton.addEventListener('click', () => {
                     removeItem(itemId);
                 });
 
-                listItem.textContent = `${item.name} x${item.count} - $${item.price * item.count}`;
-                listItem.appendChild(removeButton);
+                const hr = document.createElement('hr');
+
+                quantityContainer.appendChild(subtractButton); // Добавляем кнопку "-" в контейнер
+                quantityContainer.appendChild(quantityText); // Добавляем цифру в контейнер
+                quantityContainer.appendChild(addButton); // Добавляем кнопку "+" в контейнер
+                quantityContainer.appendChild(hr); // hr
+
+                listItem.textContent = `${item.name} - $${item.price * item.count}`;
+                listItem.appendChild(quantityContainer); // Добавляем контейнер в элемент списка
                 cart.appendChild(listItem);
 
                 total += item.price * item.count; // Обновите общую сумму
             }
 
             totalElement.textContent = `Общая сумма: $${total.toFixed(2)}`; // Отображение общей суммы с двумя знаками после запятой
+        }
+
+        function addItem(itemId) {
+            if (selectedItems[itemId]) {
+                selectedItems[itemId].count++;
+            }
+            updateCart();
         }
 
         function removeItem(itemId) {
